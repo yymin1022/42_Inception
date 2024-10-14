@@ -17,4 +17,4 @@ RUN chmod +x /var/www/html/config.sh
 RUN sh /var/www/html/config.sh
 
 WORKDIR /var/www/html
-CMD ["php-fpm7.4", "-F"]
+CMD ["/usr/sbin/php-fpm7.4", "-F"]
