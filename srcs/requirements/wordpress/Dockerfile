@@ -13,8 +13,7 @@ RUN apt install -y php7.4-fpm php7.4-mysql mariadb-client curl
 COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d
 
 ADD https://wordpress.org/latest.tar.gz /var/www/wordpress.tar.gz
-RUN cd /var/www && tar -xzvf wordpress.tar.gz
-RUN rm -rf wordpress.tar.gz
+RUN cd /var/www && tar -xzvf wordpress.tar.gz && rm -rf wordpress.tar.gz
 RUN curl https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar --output /usr/bin/wp --silent
 RUN chmod +x ./usr/bin/wp
 
