@@ -11,8 +11,8 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
   && chmod +x wp-cli.phar \
   && mv wp-cli.phar /usr/local/bin/wp
 
-COPY ./conf/config.sh /tmp/config.sh
-RUN chmod +x /tmp/config.sh
+COPY ./conf/config.sh /var/www/html/config.sh
+RUN chmod +x /var/www/html/config.sh
 
 ENTRYPOINT ["bash", "/tmp/config.sh"]
 
