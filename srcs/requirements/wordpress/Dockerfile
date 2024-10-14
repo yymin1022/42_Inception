@@ -14,7 +14,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 COPY ./conf/config.sh /var/www/html/config.sh
 RUN chmod +x /var/www/html/config.sh
 
-ENTRYPOINT ["bash", "/var/www/html/config.sh"]
+ENTRYPOINT ["./var/www/html/config.sh"]
 
 WORKDIR /var/www/html
-CMD ["php-fpm7.4", "-F"]
+CMD ["/usr/bin/php-fpm7.4", "-F"]
