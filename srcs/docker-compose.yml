@@ -4,7 +4,7 @@ services:
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb
-    restart: unless_stopped
+    restart: unless-stopped
     env_file:
       - .env
     volumes:
@@ -15,16 +15,20 @@ services:
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
+    restart: unless-stopped
     env_file:
       - .env
     networks:
       - inception
     depends_on:
       - mariadb
+    ports:
+      - "9000:9000"
 
   nginx:
     container_name: nginx
     build: ./requirements/nginx
+    restart: unless-stopped
     hostname: localhost
     volumes:
       - wp:/var/www/html/wordpress
