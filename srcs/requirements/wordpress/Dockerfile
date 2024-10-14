@@ -6,13 +6,16 @@ RUN apt update
 RUN apt install -y php-fpm php-mysql mariadb-client curl
 
 COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d
+RUN mkdir /run/php
 
-ADD https://wordpress.org/latest.tar.gz /var/www/wordpress.tar.gz
-RUN cd /var/www && tar -xzvf wordpress.tar.gz && rm -rf wordpress.tar.gz
-RUN curl https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar --output /usr/bin/wp --silent
-RUN chmod +x ./usr/bin/wp
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+  && chmod +x wp-cli.phar \
+  && mv wp-cli.phar /usr/local/bin/wp
 
-COPY ./conf/config.sh /var/www/wordpress/config.sh
-RUN chmod +x /var/www/wordpress/config.sh
+COPY ./conf/config.sh /tmp/config.sh
+RUN chmod +x /tmp/config.sh
 
-CMD ["bash", "/var/www/wordpress/config.sh"]
+ENTRYPOINT ["bash", "/tmp/config.sh"]
+
+WORKDIR /var/www/html
+CMD ["/usr/sbin/php-fpm7.4", "-F"]
