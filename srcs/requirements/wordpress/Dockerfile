@@ -3,12 +3,7 @@ FROM debian:bookworm
 EXPOSE 9000
 
 RUN apt update
-RUN apt install -y lsb-release apt-transport-https ca-certificates wget gnupg2
-RUN wget -qO - https://packages.sury.org/php/apt.gpg | apt-key add -
-RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/sury-php.list
-
-RUN apt update
-RUN apt install -y php7.4-fpm php7.4-mysql mariadb-client curl
+RUN apt install -y php-fpm php-mysql mariadb-client curl
 
 COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d
 
