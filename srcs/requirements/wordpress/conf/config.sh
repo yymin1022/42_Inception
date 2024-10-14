@@ -1,18 +1,20 @@
 #!/bin/bash
-cd /var/www/wordpress
-wp core config	--dbhost=$DB_HOST \
-				--dbname=$DB_NAME \
-				--dbuser=$DB_USER \
-				--dbpass=$DB_PASSWORD \
-				--allow-root
 
-wp core install	--title=$WP_TITLE \
-				--admin_user=$WP_ADMIN_USER \
-				--admin_password=$WP_ADMIN_PASSWORD \
-				--admin_email=$WP_ADMIN_EMAIL \
-				--url=$WP_URL \
-				--allow-root
+if [ -f ./wp-config.php ]
+then
+	echo "wordpress already downloaded"
+else
+	wget http://wordpress.org/latest.tar.gz
+	tar -xzvf latest.tar.gz
+	mv wordpress/* .
+	rm -rf latest.tar.gz
+	rm -rf wordpress
 
-wp user create $WP_USER $WP_USER_EMAIL --role=author --user_pass=$WP_USER_PASSWORD --allow-root
+	sed -i "s/username_here/$DB_USER/g" wp-config-sample.php
+	sed -i "s/password_here/$DB_PASSWORD/g" wp-config-sample.php
+	sed -i "s/localhost/$DB_HOSTNAME/g" wp-config-sample.php
+	sed -i "s/database_name_here/$DB_NAME/g" wp-config-sample.php
+	cp wp-config-sample.php wp-config.php
+fi
 
-php-fpm7.3 -F
+exec "$@"
