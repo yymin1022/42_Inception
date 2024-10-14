@@ -17,4 +17,4 @@ RUN chmod +x /var/www/html/config.sh
 ENTRYPOINT ["bash", "/var/www/html/config.sh"]
 
 WORKDIR /var/www/html
-CMD ["/usr/sbin/php-fpm7.4", "-F"]
+CMD ["php-fpm7.4", "-F"]
