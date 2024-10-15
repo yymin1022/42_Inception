@@ -8,8 +8,9 @@ RUN apt install -y mariadb-server
 RUN rm -rf /etc/mysql/mariadb.conf.d/50-server.cnf
 COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d
 
-COPY ./tools/setup.sh /
-RUN bash ./setup.sh
-RUN rm -rf setup.sh
+COPY ./tools/setup.sh /tmp
+RUN chmod +x /tmp/setup.sh
 
-CMD ["mysqld_safe"]
+RUN bash /tmp/setup.sh
+
+CMD ["mysqld"]
