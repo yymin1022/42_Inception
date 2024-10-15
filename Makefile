@@ -5,6 +5,7 @@ clean:
 	sudo docker compose -f ./srcs/docker-compose.yml down --rmi all
 
 fclean: clean
+	sudo docker buildx prune -f
 
 re: fclean all
 
