@@ -1,12 +1,14 @@
 FROM debian:bullseye
 
 RUN apt update
-RUN apt install -y nginx openssl
+RUN apt install -y nginx openssl tini
 
-COPY ./conf/nginx.conf /etc/nginx/sites-available/default
+RUN	openssl req -newkey rsa:4096 -days 365 -nodes -x509 \
+	-subj "/C=KR/ST=Seoul/L=Seoul/O=42Seoul/OU=Gun/CN=${DOMAIN_NAME}" \
+	-keyout /etc/ssl/private/localhost.dev.key \
+	-out etc/ssl/certs/localhost.dev.crt && \
+	chmod 600 etc/ssl/certs/localhost.dev.crt etc/ssl/private/localhost.dev.key
 
-RUN openssl req -x509 -days 365 -nodes -newkey rsa:4096 \
-	-keyout /etc/ssl/private/nginx.key \
-	-out /etc/ssl/certs/nginx.crt -sha256 -subj "/CN=yonyoo.42.fr"
+COPY ./conf/nginx.conf /etc/nginx/conf.d/default.conf
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/usr/bin/tini", "--", "nginx", "-g", "daemon off;"]

@@ -2,59 +2,61 @@ services:
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb
-    image: mariadb:yonyoo
-    restart: unless-stopped
-    volumes:
-      - db:/var/lib/mysql
-    networks:
-      - inception
+    image: mariadb
+    expose:
+      - "3306"
     env_file:
       - .env
+    volumes:
+      - mariadb-volume:/var/lib/mysql
+    networks:
+      - inception
+    restart: unless-stopped
 
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
-    image: wordpress:yonyoo
-    restart: unless-stopped
-    volumes:
-      - wp:/var/www/html/
-    networks:
-      - inception
-    depends_on:
-      - mariadb
+    image: wordpress
+    expose:
+      - '9000'
     env_file:
       - .env
+    volumes:
+      - wordpress-volume:/var/www/html
+    networks:
+      - inception
+    restart: unless-stopped
 
   nginx:
     container_name: nginx
     build: ./requirements/nginx
-    image: nginx:yonyoo
-    restart: unless-stopped
+    image: nginx
+    ports:
+      - '443:443'
+    env_file:
+      - .env
     volumes:
-      - wp:/var/www/html/
+      - wordpress-volume:/var/www/html
     networks:
       - inception
-    depends_on:
-      - wordpress
-    ports:
-      - "443:443"
+    restart: unless-stopped
 
 volumes:
-  db:
-    name: db
+  mariadb-volume:
+    name: mariadb-volume
     driver: local
     driver_opts:
+      type: none
       device: /home/yonyoo/data/db
       o: bind
-      type: none
-  wp:
-    name: wp
+  wordpress-volume:
+    name: wordpress-volume
     driver: local
     driver_opts:
+      type: none
       device: /home/yonyoo/data/wp
       o: bind
-      type: none
 
 networks:
   inception:
-    name: inception
+    driver: bridge

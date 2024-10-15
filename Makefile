@@ -1,12 +1,21 @@
+COMPOSE_FILE = ./srcs/docker-compose.yml
+IMAGES = nginx mariadb wordpress
+VOLUMES = mariadb-volume wordpress-volume
+DATA = /home/yonyoo/data
+
 all:
-	sudo docker compose -f ./srcs/docker-compose.yml up -d
+	mkdir -p /home/yonyoo/data/wp
+	mkdir -p /home/yonyoo/data/db
+	sudo docker compose -f $(COMPOSE_FILE) up --build -d
 
 clean:
-	sudo docker compose -f ./srcs/docker-compose.yml down --rmi all
+	sudo docker compose -f $(COMPOSE_FILE) down
 
 fclean: clean
-	sudo docker system prune -f
+	sudo docker image rm -f $(IMAGES)
+	sudo docker volume rm -f $(VOLUMES)
+	sudo rm -rf $(DATA)
 
 re: fclean all
 
-.PHONE: all, clean, fclean, re
+.PHONY : all clean fclean re
