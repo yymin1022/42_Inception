@@ -10,7 +10,4 @@ COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d
 
 COPY ./tools/setup.sh /tmp
 RUN chmod +x /tmp/setup.sh
-
-RUN bash /tmp/setup.sh
-
-CMD ["mysqld"]
+CMD ["sh", "/tmp/setup.sh"]
