@@ -16,3 +16,5 @@ else
 	sed -i "s/database_name_here/$DB_NAME/g" wp-config-sample.php
 	cp wp-config-sample.php wp-config.php
 fi
+
+exec "$@"
