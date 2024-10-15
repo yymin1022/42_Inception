@@ -16,10 +16,9 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
   && chmod +x wp-cli.phar \
   && mv wp-cli.phar /usr/local/bin/wp
 
+COPY ./conf/config.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/config.sh
+ENTRYPOINT ["/usr/local/bin/config.sh"]
+
 WORKDIR /var/www/html
-COPY ./conf/config.sh /var/www/html/config.sh
-RUN chmod +x /var/www/html/config.sh
-
-RUN sh /var/www/html/config.sh
-
 CMD ["/usr/sbin/php-fpm7.4", "-F"]
