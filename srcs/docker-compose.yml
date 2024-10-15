@@ -44,14 +44,14 @@ volumes:
     name: db
     driver: local
     driver_opts:
-      device: /home/yong/data/db
+      device: /home/yonyoo/data/db
       o: bind
       type: none
   wp:
     name: wp
     driver: local
     driver_opts:
-      device: /home/yong/data/wp
+      device: /home/yonyoo/data/wp
       o: bind
       type: none
 
